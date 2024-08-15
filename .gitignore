@@ -1,4 +1,4 @@
-minecraft/libraries
+minecraft/**
 *.zip
 *.jar
 *.log

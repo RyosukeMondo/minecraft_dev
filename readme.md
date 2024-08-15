@@ -16,6 +16,9 @@ https://maven.minecraftforge.net/net/minecraftforge/forge/1.20.1-47.3.5/forge-1.
 
 https://maven.minecraftforge.net/net/minecraftforge/forge/1.20.1-47.3.5/forge-1.20.1-47.3.5-mdk.zip
 
+
+## edit and build
+
 after docker image up and running, go to http://localhost:8180/
 
 ```bash
@@ -25,5 +28,23 @@ rm -rf ~/.gradle/caches/
 # usual
 ./gradlew build
 ```
+
+you will find your mod file under workspace/build/libs.
+
+## forge server for test
+
+once docker-compose up, your forge server stops.
+
+edit minecraft\eula.txt.
+
+```bash
+eula=false
+# to
+eula=true
+```
+
+then save eula.txt and re up docker-compose.
+
+copy your mod file to mods folder.
 
 enjoy!
