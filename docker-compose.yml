@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  minecraft:
+    image: openjdk:17-jdk
+    container_name: minecraft-forge-1.20.1
+    ports:
+      - "25565:25565"
+    volumes:
+      - ./minecraft:/minecraft
+      - ./mods:/minecraft/mods
+    working_dir: /minecraft
+    environment:
+      - EULA=TRUE
+    command: >
+      /bin/sh -c "
+        mkdir -p /minecraft /minecraft/mods &&
+        if [ ! -f forge-1.20.1-47.3.5-server.jar ]; then
+          curl -L -o forge-1.20.1-47.3.5-installer.jar https://maven.minecraftforge.net/net/minecraftforge/forge/1.20.1-47.3.5/forge-1.20.1-47.3.5-installer.jar &&
+          java -jar forge-1.20.1-47.3.5-installer.jar --installServer
+        fi &&
+        java -Xmx2G -Xms2G -jar forge-1.20.1-47.3.5-server.jar nogui
+      "
+
+  vscode:
+    build:
+      context: .
+      dockerfile: Dockerfile.vscode
+    container_name: vscode
+    ports:
+      - "8180:8080"
+    volumes:
+      - ./workspace:/home/coder/project
+      - ./mdk:/home/coder/mdk
+      - vscode_extensions:/home/coder/.local/share/code-server/extensions
+    environment:
+      - PASSWORD=your_password_here
+
+volumes:
+  vscode_extensions:

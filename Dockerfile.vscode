@@ -1,0 +1,28 @@
+FROM codercom/code-server
+
+USER root
+RUN apt-get update && apt-get install -y unzip openjdk-17-jdk
+
+# Set JAVA_HOME
+ENV JAVA_HOME /usr/lib/jvm/java-17-openjdk-amd64
+ENV PATH $JAVA_HOME/bin:$PATH
+
+# Create the startup script as root
+RUN echo '#!/bin/sh\n\
+mkdir -p /home/coder/minecraft /home/coder/mods /home/coder/workspace\n\
+if [ ! -f /home/coder/mdk/forge-1.20.1-47.3.5-mdk.zip ]; then\n\
+  curl -L -o /home/coder/mdk/forge-1.20.1-47.3.5-mdk.zip https://maven.minecraftforge.net/net/minecraftforge/forge/1.20.1-47.3.5/forge-1.20.1-47.3.5-mdk.zip\n\
+  unzip -o /home/coder/mdk/forge-1.20.1-47.3.5-mdk.zip -d /home/coder/project\n\
+fi\n\
+exec /usr/bin/entrypoint.sh "$@"' > /usr/local/bin/start-vscode.sh && \
+    chmod +x /usr/local/bin/start-vscode.sh
+
+USER coder
+RUN code-server --install-extension vscjava.vscode-java-pack && \
+    code-server --install-extension redhat.vscode-xml && \
+    code-server --install-extension dotjoshjohnson.xml
+
+WORKDIR /home/coder/project
+
+ENTRYPOINT ["/usr/local/bin/start-vscode.sh"]
+CMD ["--bind-addr", "0.0.0.0:8080", "/home/coder/project"]
