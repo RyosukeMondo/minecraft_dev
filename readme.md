@@ -10,13 +10,19 @@
 .\setup.bat
 ```
 
-It will build VSCode server.
+It will build docker image minecraft forge server and VSCode server with minecraft forge MDK.
 
-Minecraft forge MDK install.
+https://maven.minecraftforge.net/net/minecraftforge/forge/1.20.1-47.3.5/forge-1.20.1-47.3.5-installer.jar
+
+https://maven.minecraftforge.net/net/minecraftforge/forge/1.20.1-47.3.5/forge-1.20.1-47.3.5-mdk.zip
 
 after docker image up and running, go to http://localhost:8180/
 
-```cmd
+```bash
+# only for first time or build fail.
+rm -rf ~/.gradle/caches/
+
+# usual
 ./gradlew build
 ```
 
